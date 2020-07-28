@@ -1,0 +1,35 @@
+CREATE EXTERNAL TABLE bus_feed (
+  trip_id string,
+  route_id int,
+  lat float,
+  lon float,
+  stop_sequence int,
+)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES ("separatorChar" = ",")
+STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat'
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION 's3://[NAME OF THE BUCKET WHERE YOU WANT TO STORE THE BUS FEED]/bus/'
+TBLPROPERTIES ('has_encrypted_data'='false');
+
+###################
+
+
+CREATE EXTERNAL TABLE stop_times (
+  trip_id string,
+  arrival_time string,
+  departure_time string,
+  stop_id string,
+  stop_sequence int,
+  stop_headsign string,
+  pickup_type int,
+  drop_off_type int,
+  shape_dist_traveled int,
+  timepoint int
+)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES ("separatorChar" = ",")
+STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat'
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION 's3://atac-static/stop_times/'
+TBLPROPERTIES ('has_encrypted_data'='false');
